@@ -6,7 +6,8 @@ db.serialize(() => {
     db.run(`CREATE TABLE IF NOT EXISTS users (
         id TEXT PRIMARY KEY,
         display_name TEXT,
-        email TEXT
+        email TEXT,
+        streak INTEGER DEFAULT 0
     )`);
 
     db.run(`CREATE TABLE IF NOT EXISTS viral_songs (
@@ -34,6 +35,14 @@ db.serialize(() => {
 
     db.run(`CREATE TABLE IF NOT EXISTS last_update (
         date TEXT
+    )`);
+
+    db.run(`CREATE TABLE IF NOT EXISTS wordle (
+        user_id TEXT,
+        date TEXT,
+        word TEXT,
+        attempts TEXT,
+        PRIMARY KEY (user_id, date)
     )`);
 
     // Adaugă o înregistrare inițială în tabela last_update

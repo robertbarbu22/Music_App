@@ -20,6 +20,9 @@ app.use(session({
     saveUninitialized: true,
 }));
 
+// Configurare pentru parsarea JSON
+app.use(express.json());
+
 // Setează directorul 'frontend' pentru a servi conținut static
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
@@ -83,7 +86,21 @@ app.get('/callback', (req, res) => {
                 request.get(userOptions, (error, response, body) => {
                     if (!error && response.statusCode === 200) {
                         req.session.user = body;
-                        res.redirect('/home');
+                        // Salvare date utilizator în baza de date
+                        const { id, display_name, email } = body;
+                        db.get(`SELECT streak FROM users WHERE id = ?`, [id], (err, row) => {
+                            if (err) {
+                                console.error('Error fetching user data:', err);
+                                return res.redirect('/#error=database_error');
+                            }
+                            const streak = row ? row.streak : 0;
+                            db.run(`INSERT OR REPLACE INTO users (id, display_name, email, streak) VALUES (?, ?, ?, ?)`, [id, display_name, email, streak], (err) => {
+                                if (err) {
+                                    console.error('Error inserting user data:', err);
+                                }
+                                res.redirect('/home');
+                            });
+                        });
                     } else {
                         res.redirect('/#error=' + response.statusCode);
                     }
@@ -96,6 +113,7 @@ app.get('/callback', (req, res) => {
         res.redirect('/#error=invalid_token');
     }
 });
+
 
 // Verifică și actualizează piesele virale o dată pe zi
 const updateViralSongs = (accessToken, callback) => {
@@ -175,9 +193,20 @@ app.get('/profile', (req, res) => {
 // Ruta pentru informațiile de profil
 app.get('/profile-info', (req, res) => {
     if (req.session.auth && req.session.user) {
-        res.json({
-            display_name: req.session.user.display_name,
-            email: req.session.user.email
+        const userId = req.session.user.id;
+        db.get('SELECT * FROM users WHERE id = ?', [userId], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch user data' });
+            }
+            if (row) {
+                return res.json({
+                    display_name: row.display_name,
+                    email: row.email,
+                    streak: row.streak || 0
+                });
+            } else {
+                return res.status(404).json({ error: 'User not found' });
+            }
         });
     } else {
         res.status(401).json({ error: 'Unauthorized' });
@@ -211,6 +240,15 @@ app.get('/favorites', (req, res) => {
 app.get('/leaderboard', (req, res) => {
     if (req.session.auth) {
         res.sendFile(path.join(__dirname, '..', 'frontend', 'html', 'leaderboard.html'));
+    } else {
+        res.redirect('/');
+    }
+});
+
+// Ruta pentru pagina de wordle
+app.get('/music-wordle', (req, res) => {
+    if (req.session.auth) {
+        res.sendFile(path.join(__dirname, '..', 'frontend', 'html', 'music-wordle.html'));
     } else {
         res.redirect('/');
     }
@@ -319,6 +357,107 @@ app.get('/api/leaderboard', (req, res) => {
                 res.json(leaderboard);
             });
         });
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+});
+
+app.get('/api/wordle', (req, res) => {
+    if (req.session.auth) {
+        const userId = req.session.user.id;
+        const today = new Date().toISOString().split('T')[0];
+
+        db.get('SELECT word, attempts FROM wordle WHERE user_id = ? AND date = ?', [userId, today], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch Wordle data' });
+            }
+            if (row) {
+                return res.json({ word: row.word, attempts: row.attempts });
+            }
+
+            const options = {
+                url: 'https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks',
+                headers: { 'Authorization': 'Bearer ' + req.session.auth.access_token },
+                json: true
+            };
+
+            request.get(options, (error, response, body) => {
+                if (error || response.statusCode !== 200) {
+                    return res.status(500).json({ error: 'Failed to fetch top songs' });
+                }
+
+                const topArtists = body.items.map(item => item.track.artists[0].name);
+                const filteredArtists = topArtists.filter(artist => artist.length <= 15);
+                const randomArtist = filteredArtists[Math.floor(Math.random() * filteredArtists.length)];
+
+                db.run('INSERT INTO wordle (user_id, date, word, attempts) VALUES (?, ?, ?, ?)', [userId, today, randomArtist, ''], (err) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Failed to save Wordle data' });
+                    }
+                    res.json({ word: randomArtist, attempts: '' });
+                });
+            });
+        });
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+});
+
+app.post('/api/wordle', (req, res) => {
+    if (req.session.auth) {
+        const userId = req.session.user.id;
+        const { attempts } = req.body;
+        const today = new Date().toISOString().split('T')[0];
+
+        db.get('SELECT word FROM wordle WHERE user_id = ? AND date = ?', [userId, today], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: 'Failed to fetch Wordle data' });
+            }
+            if (row) {
+                const correct = row.word;
+                db.run('UPDATE wordle SET attempts = ? WHERE user_id = ? AND date = ?', [attempts, userId, today], (err) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Failed to update Wordle data' });
+                    }
+
+                    if (attempts.includes(correct)) {
+                        db.run('UPDATE users SET streak = streak + 1 WHERE id = ?', [userId], (err) => {
+                            if (err) {
+                                return res.status(500).json({ error: 'Failed to update streak' });
+                            }
+                            res.json({ word: correct });
+                        });
+                    } else {
+                        res.json({ word: correct });
+                    }
+                });
+            }
+        });
+    } else {
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+});
+
+app.post('/api/update-streak', (req, res) => {
+    if (req.session.auth) {
+        const userId = req.session.user.id;
+        const { success } = req.body;
+
+        if (success) {
+            db.run('UPDATE users SET streak = streak + 1 WHERE id = ?', [userId], (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Failed to update streak' });
+                }
+                db.get('SELECT streak FROM users WHERE id = ?', [userId], (err, row) => {
+                    if (err) {
+                        return res.status(500).json({ error: 'Failed to fetch streak' });
+                    }
+                    res.json({ streak: row.streak });
+                });
+            });
+        } else {
+            res.json({ message: 'No update to streak' });
+        }
     } else {
         res.status(401).json({ error: 'Unauthorized' });
     }

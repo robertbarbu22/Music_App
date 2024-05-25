@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('greeting').textContent = `Hello, ${data.display_name}`;
             document.getElementById('name').textContent = data.display_name;
             document.getElementById('email').textContent = data.email;
+            document.getElementById('wordle-streak').textContent = data.streak;
         })
         .catch(error => console.error('Error fetching profile info:', error));
 

@@ -1,0 +1,152 @@
+body.dark-mode {
+    background-image: url('/images/home.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+body.light-mode {
+    background-image: url('/images/home_light.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .mode-toggle {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+body.light-mode .mode-toggle {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.wordle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.wordle-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.wordle-cell {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    font-size: 24px;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.correct {
+    background-color: green;
+    color: white;
+}
+
+.present {
+    background-color: yellow;
+    color: black;
+}
+
+.absent {
+    background-color: gray;
+    color: white;
+}
+.space-cell {
+    background-color: black;
+}
+
+.toast {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.toast.success {
+    background-color: green;
+}
+
+.toast.error {
+    background-color: red;
+}
+
+.check-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.check-button:hover {
+    background-color: #005f5f;
+    color: white;
+}
+
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+.home-button{
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.home-button:hover{
+    background-color: #000f97;
+}
