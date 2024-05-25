@@ -1,0 +1,92 @@
+body.dark-mode {
+    background-image: url('/images/background.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+body.light-mode {
+    background-image: url('/images/background_light.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Stiluri specifice pentru butonul de toggle în funcție de mod */
+body.dark-mode .mode-toggle {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+body.light-mode .mode-toggle {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.login-container {
+    text-align: center;
+    margin-top: -50px;
+}
+
+.login-button {
+    background-color: #1DB954;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #000f97;
+}
+
+.welcome-message {
+    font-family: 'Montserrat', sans-serif; /* Folosirea fontului Montserrat */
+    font-weight: bold; 
+    font-size: 24px;
+    position: absolute;
+    top: 25%; 
+    width: 100%; 
+    text-align: center;
+}
+
+body.light-mode .welcome-message {
+    color: black;
+}
+
+body.dark-mode .welcome-message {
+    color: white;
+}

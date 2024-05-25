@@ -1,0 +1,93 @@
+body.dark-mode {
+    background-image: url('/images/home.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+body.light-mode {
+    background-image: url('/images/home_light.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+}
+
+body.dark-mode .mode-toggle {
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .mode-toggle {
+    background-color: black;
+    color: white;
+}
+
+.nav-buttons {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.nav-button, .logout-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.nav-button {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+.logout-button {
+    background-color: #e50914;
+    color: white;
+    border: none;
+}
+
+.nav-button:hover, .logout-button:hover {
+    background-color: #000f97;
+}
+
+.profile-container {
+    text-align: center;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 10vh; 
+    width: 50%; 
+}
+
+.profile-info {
+    margin: 20px 0;
+}

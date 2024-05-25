@@ -1,0 +1,126 @@
+/* Stiluri similare pentru dark mode și light mode */
+body.dark-mode {
+    background-image: url('/images/home.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+body.light-mode {
+    background-image: url('/images/home_light.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .mode-toggle {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+body.light-mode .mode-toggle {
+    background-color: black;
+    color: white;
+    font-weight: bold;
+}
+
+.home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .home-button {
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .home-button {
+    background-color: black;
+    color: white;
+}
+
+.main-content {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+}
+
+.favorite-song {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 30px;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundal negru transparent pentru dark mode */
+    color: white;
+    display: flex;
+    align-items: center;
+}
+
+body.light-mode .favorite-song {
+    background-color: rgba(0, 51, 102, 0.8); /* Fundal albastru închis transparent pentru light mode */
+    color: white; /* Culoarea textului să rămână albă pentru contrast */
+}
+
+.favorite-song-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.album-cover {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+}
+
+.song-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Alinează vertical conținutul în centrul containerului */
+}
+
+audio {
+    width: 100%;
+    max-width: 300px;
+    align-items: center;
+}
