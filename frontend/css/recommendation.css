@@ -1,0 +1,197 @@
+body.dark-mode {
+    background-image: url('/images/home.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+body.light-mode {
+    background-image: url('/images/home_light.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+.mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    transition: background-color 0.3s, color 0.3s;
+    font-weight: bold;
+}
+
+body.dark-mode .mode-toggle {
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .mode-toggle {
+    background-color: black;
+    color: white;
+}
+
+.header {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+.home-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .home-button {
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .home-button {
+    background-color: black;
+    color: white;
+}
+
+.main-content {
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-top: 10vh;
+}
+
+.main-content h2 {
+    margin-top: 0;
+}
+
+.main-content p {
+    margin: 10px 0;
+}
+
+.main-content .happiness-input {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid #61dafb;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.main-content .submit-button {
+    margin-top: 20px;
+    background: #61dafb;
+    color: #282c34;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.main-content .submit-button:hover {
+    background: #21a1f1;
+}
+
+.recommendations {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.song {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background: #333;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.song img {
+    width: 60px;
+    height: 60px;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.song-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.song-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.song-artist {
+    font-size: 14px;
+    color: #bbb;
+}
+
+audio {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.toast {
+    visibility: hidden;
+    max-width: 50px;
+    height: 50px;
+    margin-left: -125px;
+    margin-top: 20px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+    white-space: nowrap;
+}
+
+.toast #img {
+    width: 50px;
+    height: 50px;
+    float: left;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    box-sizing: border-box;
+    background-color: #111;
+    color: #fff;
+}
+
+.toast #desc {
+    color: #fff;
+    padding: 16px;
+    overflow: hidden;
+    white-space: nowrap;
+}

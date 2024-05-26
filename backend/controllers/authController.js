@@ -8,15 +8,18 @@ const login = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.error('Error destroying session:', err);
+        } else {
+            console.log('Session destroyed successfully');
+            res.clearCookie('connect.sid', { path: '/' }); // Clear the session cookie
+            const scope = 'user-read-private user-read-email user-library-modify';
+            res.redirect('https://accounts.spotify.com/authorize?' +
+                new URLSearchParams({
+                    response_type: 'code',
+                    client_id: CLIENT_ID,
+                    scope: scope,
+                    redirect_uri: REDIRECT_URI
+                }));
         }
-        const scope = 'user-read-private user-read-email user-library-modify';
-        res.redirect('https://accounts.spotify.com/authorize?' +
-            new URLSearchParams({
-                response_type: 'code',
-                client_id: CLIENT_ID,
-                scope: scope,
-                redirect_uri: REDIRECT_URI
-            }));
     });
 };
 

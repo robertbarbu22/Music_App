@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="/css/recommendation.css">
+    <script src="/javascript/mode-toggle.js" defer></script>
+    <script src="/javascript/recommendation.js" defer></script>
+</head>
+<body class="dark-mode">
+    <button id="mode-toggle" class="mode-toggle">Switch to Light Mode</button>
+    <div class="header">
+        <a href="/home" class="home-button">Home</a>
+    </div>
+    <div class="main-content">
+        <h2>Tell us how you feel</h2>
+        <p>On a scale of 1 to 10, how happy are you today?</p>
+        <input type="number" class="happiness-input" id="happiness-input" min="1" max="10">
+        <button class="submit-button" onclick="getRecommendations()">Submit</button>
+        <div id="recommendations" class="recommendations"></div>
+    </div>
+    <div id="toast" class="toast">
+        <div id="img">🎵</div>
+        <div id="desc">Please enter a happiness level between 1 and 10.</div>
+    </div>
+</body>
+</html>
