@@ -1,3 +1,4 @@
+/* Stiluri similare pentru dark mode și light mode */
 body.dark-mode {
     background-image: url('/images/home.png');
     background-size: cover;
@@ -28,12 +29,6 @@ body.light-mode {
     margin: 0;
 }
 
-.header {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-}
-
 .mode-toggle {
     position: absolute;
     top: 20px;
@@ -58,6 +53,9 @@ body.light-mode .mode-toggle {
 }
 
 .home-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
     padding: 10px 20px;
     cursor: pointer;
     font-size: 16px;
@@ -121,17 +119,17 @@ body.light-mode .song {
     justify-content: center;
 }
 
+button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+}
+
 audio {
     width: 100%;
     max-width: 300px;
     align-items: center;
 }
 
-.rating {
-    margin-left: 20px;
-}
-
-.favorite {
-    margin-left: 20px;
-    cursor: pointer;
-}

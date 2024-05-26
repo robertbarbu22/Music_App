@@ -24,38 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 audio.controls = true;
                 audio.src = song.preview_url;
 
+                const ratingSection = document.createElement('div');
+                ratingSection.className = 'rating-section';
+
                 const ratingInput = document.createElement('input');
                 ratingInput.type = 'number';
                 ratingInput.min = '1';
                 ratingInput.max = '10';
                 ratingInput.placeholder = 'Rate 1-10';
                 ratingInput.className = 'rating-input';
-
-                const rateButton = document.createElement('button');
-                rateButton.innerText = 'Rate';
-                rateButton.onclick = () => {
-                    const rating = ratingInput.value;
-                    if (rating >= 1 && rating <= 10) {
-                        fetch('/api/rate-song', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                songId: song.id,
-                                rating: rating
-                            })
-                        }).then(response => response.json())
-                          .then(data => {
-                              alert('Rating saved successfully');
-                          });
-                    } else {
-                        alert('Please enter a rating between 1 and 10');
-                    }
-                };
+                ratingInput.dataset.songId = song.id;
 
                 const favoriteButton = document.createElement('button');
                 favoriteButton.innerHTML = '⭐';
+                favoriteButton.className = 'favorite-button';
                 favoriteButton.onclick = () => {
                     fetch('/api/add-favorite', {
                         method: 'POST',
@@ -71,15 +53,51 @@ document.addEventListener('DOMContentLoaded', () => {
                       });
                 };
 
+                ratingSection.appendChild(favoriteButton);
+                ratingSection.appendChild(ratingInput);
+
                 songInfo.appendChild(songTitle);
                 songInfo.appendChild(audio);
-                songInfo.appendChild(ratingInput);
-                songInfo.appendChild(rateButton);
-                songInfo.appendChild(favoriteButton);
+                songInfo.appendChild(ratingSection);
 
                 songDiv.appendChild(albumCover);
                 songDiv.appendChild(songInfo);
                 songList.appendChild(songDiv);
+            });
+
+            const rateAllButton = document.getElementById('rate-all-button');
+            rateAllButton.disabled = false;
+
+            rateAllButton.addEventListener('click', () => {
+                const ratingInputs = document.querySelectorAll('.rating-input');
+                const ratings = Array.from(ratingInputs).map(input => {
+                    return {
+                        songId: input.dataset.songId,
+                        rating: input.value
+                    };
+                });
+
+                if (ratings.some(r => !r.rating)) {
+                    alert('Please rate all songs before submitting.');
+                    return;
+                }
+
+                Promise.all(ratings.map(r => {
+                    return fetch('/api/rate-song', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(r)
+                    });
+                }))
+                .then(() => {
+                    alert('All ratings saved successfully');
+                })
+                .catch(err => {
+                    console.error('Error saving ratings:', err);
+                    alert('An error occurred while saving ratings');
+                });
             });
         });
 });

@@ -1,3 +1,4 @@
+/* Stiluri similare pentru dark mode și light mode */
 body.dark-mode {
     background-image: url('/images/home.png');
     background-size: cover;
@@ -67,12 +68,38 @@ body.light-mode .mode-toggle {
     transition: background-color 0.3s, color 0.3s;
 }
 
-body.dark-mode .home-button {
+.leaderboard-button{
+    position: absolute;
+    top: 20px;
+    left: 160px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 20px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    border: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode .home-button{
     background-color: white;
     color: black;
 }
 
-body.light-mode .home-button {
+body.light-mode .home-button{
+    background-color: black;
+    color: white;
+}
+
+body.dark-mode .leaderboard-button{
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .leaderboard-button{
     background-color: black;
     color: white;
 }
@@ -88,15 +115,15 @@ body.light-mode .home-button {
     margin: 20px 0;
     padding: 10px;
     border-radius: 30px;
-    background-color: rgba(0, 0, 0, 0.7); /* Fundal negru transparent pentru dark mode */
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
     display: flex;
     align-items: center;
 }
 
 body.light-mode .song {
-    background-color: rgba(0, 51, 102, 0.8); /* Fundal albastru închis transparent pentru light mode */
-    color: white; /* Culoarea textului să rămână albă pentru contrast */
+    background-color: rgba(0, 51, 102, 0.8);
+    color: white;
 }
 
 .song-content {
@@ -115,7 +142,12 @@ body.light-mode .song {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Alinează vertical conținutul în centrul containerului */
+    justify-content: center;
+}
+
+.rating-section {
+    display: flex;
+    align-items: center;
 }
 
 .rating-input {
@@ -126,13 +158,27 @@ body.light-mode .song {
 button {
     padding: 5px 10px;
     margin-right: 10px;
-    border-radius: 5px;
+    border-radius: 20px;
     border: none;
     cursor: pointer;
+}
+
+.rate-all-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin-top: 20px;
 }
 
 audio {
     width: 100%;
     max-width: 300px;
     align-items: center;
+}
+
+.favorite-button {
+    font-size: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: none;
+    background: none;
 }

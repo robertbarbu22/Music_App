@@ -1,25 +1,46 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const favoritesContainer = document.getElementById('favorites-container');
-
+document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/favorites')
         .then(response => response.json())
-        .then(favorites => {
-            favorites.forEach((favorite, index) => {
-                const favoriteElement = document.createElement('div');
-                favoriteElement.classList.add('favorite-song');
-
-                favoriteElement.innerHTML = `
-                    <img src="${favorite.albumCover}" alt="${favorite.title}" class="album-cover">
-                    <div class="song-info">
-                        <h3>${index + 1}. ${favorite.title} by ${favorite.artist}</h3>
-                        <audio controls>
-                            <source src="${favorite.previewUrl}" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>
+        .then(data => {
+            const favoritesContainer = document.getElementById('favorites-container');
+            favoritesContainer.innerHTML = '';
+            data.forEach((song, index) => {
+                const songElement = document.createElement('div');
+                songElement.classList.add('favorite-song');
+                songElement.innerHTML = `
+                    <div class="favorite-song-content">
+                        <img class="album-cover" src="${song.album_cover}" alt="${song.title}">
+                        <div class="song-info">
+                            <span>${index + 1}. ${song.title} by ${song.artist}</span>
+                            <audio controls>
+                                <source src="${song.preview_url}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                        <button class="remove-button" data-id="${song.id}">Remove</button>
                     </div>
                 `;
-
-                favoritesContainer.appendChild(favoriteElement);
+                favoritesContainer.appendChild(songElement);
             });
-        });
+
+            document.querySelectorAll('.remove-button').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const songId = event.target.dataset.id;
+                    fetch('/api/remove-favorite', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ songId })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data.message);
+                            location.reload();
+                        })
+                        .catch(error => {
+                            console.error('Error removing favorite:', error);
+                        });
+                });
+            });
+        })
+        .catch(error => console.error('Error fetching favorite songs:', error));
 });

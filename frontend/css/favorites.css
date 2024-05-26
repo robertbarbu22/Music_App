@@ -124,3 +124,19 @@ audio {
     max-width: 300px;
     align-items: center;
 }
+
+.remove-button {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    align-self: center; /* Aliniază butonul la centrul vertical */
+}
+
+.remove-button:hover {
+    background-color: darkred;
+}
