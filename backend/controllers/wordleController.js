@@ -6,12 +6,12 @@ const getWordle = (req, res) => {
         const userId = req.session.user.id;
         const today = new Date().toISOString().split('T')[0];
 
-        db.get('SELECT date FROM wordle WHERE user_id = ? ORDER BY date DESC LIMIT 1', [userId], (err, row) => {
+        db.get('SELECT date, attempts FROM wordle WHERE user_id = ? ORDER BY date DESC LIMIT 1', [userId], (err, row) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to fetch Wordle data' });
             }
             if (row && row.date === today) {
-                // Dacă există deja o intrare pentru azi
+                // If there's already an entry for today
                 db.get('SELECT word, attempts FROM wordle WHERE user_id = ? AND date = ?', [userId, today], (err, wordleRow) => {
                     if (err) {
                         return res.status(500).json({ error: 'Failed to fetch Wordle data' });
@@ -19,7 +19,7 @@ const getWordle = (req, res) => {
                     return res.json({ word: wordleRow.word, attempts: wordleRow.attempts });
                 });
             } else {
-                // Dacă nu există o intrare pentru azi, creează una nouă
+                // If no entry for today, create a new one
                 const options = {
                     url: 'https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks',
                     headers: { 'Authorization': 'Bearer ' + req.session.auth.access_token },
@@ -83,6 +83,7 @@ const postWordle = (req, res) => {
         res.status(401).json({ error: 'Unauthorized' });
     }
 };
+
 
 const updateStreak = (req, res) => {
     if (req.session.auth) {

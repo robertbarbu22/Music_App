@@ -45,11 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            songId: song.id
+                            songId: song.id,
+                            title: song.title,
+                            artist: song.artist,
+                            album_cover: song.album_cover,
+                            preview_url: song.preview_url
                         })
                     }).then(response => response.json())
                       .then(data => {
                           alert('Song added to favorites successfully');
+                      }).catch(error => {
+                          console.error('Error adding to favorites:', error);
                       });
                 };
 

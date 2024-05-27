@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
             wordLength = wordleWord.length;
             createWordleGrid(wordleWord);
 
-            if (data.attempts.includes(wordleWord)) {
+            if (data.attempts) {
+                populateAttempts(data.attempts);
                 lockGame(); // Lock the game if the wordle word was already guessed correctly today
             }
         })
@@ -121,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showToast(`Congratulations, the artist name was ${wordleWord}!`, true);
             updateStreak();
             lockGame();
+            saveAttempts(attempt); // Save attempts
             return;
         }
 
@@ -128,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentAttempt >= 5) {
             showToast(`Game Over! The artist name was ${wordleWord}`);
             lockGame();
+            saveAttempts(attempt); // Save attempts
             return;
         }
 
@@ -187,4 +190,38 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return prevSibling;
     }
+
+    function saveAttempts(attempt) {
+        fetch('/api/wordle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ attempts: attempt })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Attempts saved:', data);
+        })
+        .catch(error => {
+            console.error('Error saving attempts:', error);
+        });
+    }
+
+    function populateAttempts(attempts) {
+        const attemptsArray = attempts.split('\n');
+        attemptsArray.forEach((attempt, rowIndex) => {
+            const row = document.querySelectorAll('.wordle-row')[rowIndex];
+            attempt.split('').forEach((letter, cellIndex) => {
+                const cell = row.children[cellIndex];
+                cell.value = letter.toLowerCase();
+                if (wordleWord[cellIndex] === letter.toLowerCase()) {
+                    cell.classList.add('correct');
+                } else if (wordleWord.includes(letter.toLowerCase())) {
+                    cell.classList.add('present');
+                } else {
+                    cell.classList.add('absent');
+                }
+            });
+        });
+    }
 });
+

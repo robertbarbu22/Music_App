@@ -4,6 +4,7 @@ const path = require('path');
 const axios = require('axios');
 require('dotenv').config();
 const cron = require('node-cron');
+const db = require('./config/db');  // Ensure this path is correct
 
 const app = express();
 

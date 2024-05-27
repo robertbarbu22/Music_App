@@ -3,7 +3,7 @@ const db = require('../config/db');
 
 // Funcția pentru a adăuga o piesă la favorite și la Liked Songs pe Spotify
 const addFavorite = (req, res) => {
-    const { songId } = req.body;
+    const { songId, title, artist, albumCover, previewUrl } = req.body;
     const userId = req.session.user.id;
     const dateAdded = new Date().toISOString();
 
@@ -15,14 +15,9 @@ const addFavorite = (req, res) => {
         json: true
     };
 
-    request.put(options, (error, response) => {
-        if (error || response.statusCode !== 200) {
-            console.error('Error adding song to Spotify Liked Songs:', error || response.statusCode);
-            return res.status(500).json({ error: 'Failed to add song to Spotify Liked Songs' });
-        }
-
-        db.run(`INSERT OR REPLACE INTO favorites (song_id, user_id, date_added) VALUES (?, ?, ?)`,
-            [songId, userId, dateAdded],
+    const insertFavorite = (albumCover, previewUrl) => {
+        db.run(`INSERT OR REPLACE INTO favorites (song_id, user_id, title, artist, album_cover, preview_url, date_added) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [songId, userId, title, artist, albumCover, previewUrl, dateAdded],
             function (err) {
                 if (err) {
                     console.error('Error adding favorite to database:', err);
@@ -31,6 +26,33 @@ const addFavorite = (req, res) => {
                 console.log('Song added to favorites and Spotify Liked Songs successfully');
                 res.json({ message: 'Song added to favorites and Spotify Liked Songs successfully' });
             });
+    };
+
+    const fetchDetailsFromViralSongs = () => {
+        db.get(`SELECT album_cover, preview_url FROM viral_songs WHERE id = ?`, [songId], (err, row) => {
+            if (err) {
+                console.error('Error fetching details from viral_songs:', err);
+                return res.status(500).json({ error: 'Failed to fetch song details' });
+            }
+            if (row) {
+                insertFavorite(row.album_cover || albumCover, row.preview_url || previewUrl);
+            } else {
+                insertFavorite(albumCover, previewUrl);
+            }
+        });
+    };
+
+    request.put(options, (error, response) => {
+        if (error || response.statusCode !== 200) {
+            console.error('Error adding song to Spotify Liked Songs:', error || response.statusCode);
+            return res.status(500).json({ error: 'Failed to add song to Spotify Liked Songs' });
+        }
+
+        if (!albumCover || !previewUrl) {
+            fetchDetailsFromViralSongs();
+        } else {
+            insertFavorite(albumCover, previewUrl);
+        }
     });
 };
 
@@ -67,7 +89,7 @@ const removeFavorite = (req, res) => {
 const getFavorites = (req, res) => {
     const userId = req.session.user.id;
     console.log(`Fetching favorites for userId=${userId}`);
-    db.all(`SELECT * FROM viral_songs WHERE id IN (SELECT song_id FROM favorites WHERE user_id = ?)`, [userId], (err, rows) => {
+    db.all(`SELECT * FROM favorites WHERE user_id = ?`, [userId], (err, rows) => {
         if (err) {
             console.error('Error fetching favorite songs from database:', err);
             return res.status(500).json({ error: 'Failed to fetch favorite songs' });

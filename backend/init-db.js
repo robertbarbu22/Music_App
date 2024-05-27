@@ -28,7 +28,11 @@ db.serialize(() => {
 
     db.run(`CREATE TABLE IF NOT EXISTS favorites (
         song_id TEXT,
-        user_id TEXT,
+        user_id INTEGER,
+        title TEXT,
+        artist TEXT,
+        album_cover TEXT,
+        preview_url TEXT,
         date_added TEXT,
         PRIMARY KEY (song_id, user_id)
     )`);
