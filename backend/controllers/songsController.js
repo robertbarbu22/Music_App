@@ -7,7 +7,7 @@ const updateViralSongs = (accessToken, callback) => {
             return callback(err);
         }
 
-        const lastUpdate = row.date;
+        const lastUpdate = row ? row.date : '1970-01-01';
         const today = new Date().toISOString().split('T')[0];
 
         if (lastUpdate !== today) {
@@ -38,12 +38,20 @@ const updateViralSongs = (accessToken, callback) => {
                     });
                     stmt.finalize();
 
-                    db.run(`UPDATE last_update SET date = ?`, [today], (err) => {
+                    db.run(`UPDATE last_update SET date = ?`, [today], function(err) {
                         if (err) {
                             return callback(err);
                         }
                         callback(null, topSongs);
                     });
+
+                    if (!row) {
+                        db.run(`INSERT INTO last_update (date) VALUES (?)`, [today], (err) => {
+                            if (err) {
+                                return callback(err);
+                            }
+                        });
+                    }
                 });
             });
         } else {
@@ -57,13 +65,24 @@ const updateViralSongs = (accessToken, callback) => {
     });
 };
 
+const updateAndGetViralSongs = (req, res) => {
+    const accessToken = req.session.auth.access_token;
+    updateViralSongs(accessToken, (err, songs) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to update and fetch viral songs' });
+        }
+        res.json(songs);
+    });
+};
+
 const getTopSongs = (req, res) => {
     if (req.session.auth) {
-        db.all(`SELECT * FROM viral_songs`, (err, rows) => {
+        const accessToken = req.session.auth.access_token;
+        updateViralSongs(accessToken, (err, songs) => {
             if (err) {
-                return res.status(500).json({ error: 'Failed to fetch top songs' });
+                return res.status(500).json({ error: 'Failed to update and fetch top songs' });
             }
-            res.json(rows);
+            res.json(songs);
         });
     } else {
         res.status(401).json({ error: 'Unauthorized' });
@@ -107,7 +126,6 @@ const getLeaderboard = (req, res) => {
                 return res.status(500).json({ error: 'Failed to fetch leaderboard' });
             }
 
-            // Obține detaliile melodiilor
             const songIds = rows.map(row => row.song_id);
             db.all(`SELECT * FROM viral_songs WHERE id IN (${songIds.map(() => '?').join(',')})`, songIds, (err, songs) => {
                 if (err) {
@@ -134,4 +152,4 @@ const getLeaderboard = (req, res) => {
     }
 };
 
-module.exports = { updateViralSongs, getTopSongs, rateSong, getLeaderboard };
+module.exports = { updateViralSongs, updateAndGetViralSongs, getTopSongs, rateSong, getLeaderboard };

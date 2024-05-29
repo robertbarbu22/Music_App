@@ -48,8 +48,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             songId: song.id,
                             title: song.title,
                             artist: song.artist,
-                            album_cover: song.album_cover,
-                            preview_url: song.preview_url
+                            album_cover: song.albumCover,
+                            preview_url: song.previewUrl
                         })
                     }).then(response => response.json())
                       .then(data => {

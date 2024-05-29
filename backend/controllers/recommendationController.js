@@ -23,7 +23,7 @@ const getSpotifySongDetails = async (songTitle) => {
         params: {
             q: songTitle,
             type: 'track',
-            limit: 8 // Fetch up to 5 tracks to increase chances of finding one with a preview URL
+            limit: 15 // Fetch up to 15 tracks to increase chances of finding one with a preview URL
         }
     });
 

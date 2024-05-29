@@ -70,8 +70,8 @@ body.light-mode .mode-toggle {
 }
 
 .logout-button {
-    background-color: #e50914;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     border: none;
 }
 
