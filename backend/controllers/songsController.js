@@ -116,24 +116,36 @@ const rateSong = (req, res) => {
 
 const getLeaderboard = (req, res) => {
     if (req.session.auth) {
+        const today = new Date().toISOString().split('T')[0]; // Obținem data de azi în format 'YYYY-MM-DD'
+
         db.all(`
             SELECT song_id, SUM(rating) as total_rating
             FROM ratings
+            WHERE date = ?
             GROUP BY song_id
             ORDER BY total_rating DESC
-        `, (err, rows) => {
+        `, [today], (err, rows) => {
             if (err) {
                 return res.status(500).json({ error: 'Failed to fetch leaderboard' });
             }
 
+            if (rows.length === 0) {
+                return res.json([]);
+            }
+
             const songIds = rows.map(row => row.song_id);
-            db.all(`SELECT * FROM viral_songs WHERE id IN (${songIds.map(() => '?').join(',')})`, songIds, (err, songs) => {
+            const placeholders = songIds.map(() => '?').join(',');
+            db.all(`SELECT * FROM viral_songs WHERE id IN (${placeholders})`, songIds, (err, songs) => {
                 if (err) {
                     return res.status(500).json({ error: 'Failed to fetch song details' });
                 }
 
                 const leaderboard = rows.map(row => {
                     const song = songs.find(s => s.id === row.song_id);
+                    if (!song) {
+                        console.error(`Song with id ${row.song_id} not found in viral_songs`);
+                        return null;
+                    }
                     return {
                         id: song.id,
                         title: song.title,
@@ -142,7 +154,7 @@ const getLeaderboard = (req, res) => {
                         previewUrl: song.preview_url,
                         total_rating: row.total_rating
                     };
-                });
+                }).filter(item => item !== null);
 
                 res.json(leaderboard);
             });

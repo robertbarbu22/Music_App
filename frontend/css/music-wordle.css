@@ -150,3 +150,46 @@ body.light-mode .mode-toggle {
 .home-button:hover{
     background-color: #000f97;
 }
+
+body.dark-mode .home-button {
+    background-color: white;
+    color: black;
+}
+
+body.light-mode .home-button {
+    background-color: black;
+    color: white;
+}
+
+body.light-mode .check-button {
+    background-color: black;
+    color: white;
+}
+
+body.light-mode .wordle-cell {
+    background-color: black;
+    opacity: 0.6;
+    background-blend-mode: lighten;
+    color: white;
+}
+
+body.light-mode .correct {
+    background-color: green;
+    opacity: 1;
+    color: white;
+}
+
+body.light-mode .present {
+    background-color: yellow;
+    opacity: 1;
+    color: black;
+}
+
+body.light-mode .absent {
+    background-color: gray;
+    opacity: 1;
+    color: white;
+}
+body.light-mode .space-cell {
+    background-color: black;
+}
