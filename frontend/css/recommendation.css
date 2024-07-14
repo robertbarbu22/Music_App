@@ -169,7 +169,7 @@ audio {
     cursor: pointer;
     font-size: 20px;
     margin-left: auto;
-    color: #f1c40f; /* Yellow color for the star */
+    color: #f1c40f; 
 }
 
 .toast {
@@ -207,3 +207,5 @@ audio {
     overflow: hidden;
     white-space: nowrap;
 }
+
+

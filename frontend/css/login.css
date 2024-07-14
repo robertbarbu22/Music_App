@@ -74,7 +74,7 @@ body.light-mode .mode-toggle {
 }
 
 .welcome-message {
-    font-family: 'Montserrat', sans-serif; /* Folosirea fontului Montserrat */
+    font-family: 'Montserrat', sans-serif; 
     font-weight: bold; 
     font-size: 24px;
     position: absolute;

@@ -38,7 +38,7 @@ function fetchFavorites() {
                         .then(response => response.json())
                         .then(data => {
                             console.log(data.message);
-                            fetchFavorites();  // Refresh the favorites list after removal
+                            fetchFavorites();  // Refresh dupa stergere
                         })
                         .catch(error => {
                             console.error('Error removing favorite:', error);

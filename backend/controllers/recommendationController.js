@@ -23,7 +23,7 @@ const getSpotifySongDetails = async (songTitle) => {
         params: {
             q: songTitle,
             type: 'track',
-            limit: 15 // Fetch up to 15 tracks to increase chances of finding one with a preview URL
+            limit: 30 // pentru preview url
         }
     });
 
@@ -39,7 +39,7 @@ const getSpotifySongDetails = async (songTitle) => {
             };
         }
     }
-    // If no track with a preview URL is found, return the first track's details without preview URL
+    //daca nu au preview url
     if (tracks.length > 0) {
         const track = tracks[0];
         return {
@@ -60,11 +60,11 @@ const getRecommendations = async (req, res) => {
     const messages = [
         {
             role: "system",
-            content: "You are a helpful assistant that provides song recommendations."
+            content: "You are a helpful assistant that provides modern songs recommendations."
         },
         {
             role: "user",
-            content: `Give me exactly 15 modern song recommendations for a user with a happiness level of ${happinessLevel}. The recommendations should match the user's mood: 1 for sad, 10 for happy, and the levels in between. Provide each recommendation in the format 'Song Title by Artist'. Do not repeat the same songs for different requests and do not respond with any other message than the informations requested.`
+            content: `Give me exactly 15 modern song recommendations (original songs, no covers, instrumental or karaoke) for a user with a happiness level of ${happinessLevel}. The recommendations must match the user's mood: 1 for very sad songs, 10 for very happy energetic songs, and the levels in between gradually between sad and happy songs. Provide each recommendation in the format 'Song Title by Artist'. Do not repeat the same songs(try choosing what is popular now) for different requests and do not respond with any other message than the informations requested.`
         }
     ];
 

@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.attempts) {
                 populateAttempts(data.attempts);
-                lockGame(); // Lock the game if the wordle word was already guessed correctly today
+                lockGame(); // Lock daca deja s-a jucat
             }
         })
         .catch(error => console.error('Error fetching Wordle data:', error));
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let correct = 0;
         let wordleWordCopy = wordleWord.split('');
 
-        // First pass: check for correct letters in the correct position (green)
+        // litere in pozitia corecta
         attempt.split('').forEach((letter, index) => {
             const cell = row.children[index];
             if (cell.disabled) return;
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Second pass: check for correct letters in the wrong position (yellow)
+        // litere care exista in cuvant dar nu sunt in pozitita buna
         attempt.split('').forEach((letter, index) => {
             const cell = row.children[index];
             if (cell.disabled || cell.classList.contains('correct')) return;
@@ -118,11 +118,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        if (correct === wordLength - wordleWord.split(' ').length + 1) { // Account for space(s)
+        if (correct === wordLength - wordleWord.split(' ').length + 1) { // pentru spatiu
             showToast(`Congratulations, the artist name was ${wordleWord}!`, true);
             updateStreak();
             lockGame();
-            saveAttempts(attempt); // Save attempts
+            saveAttempts(attempt); 
             return;
         }
 
@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentAttempt >= 5) {
             showToast(`Game Over! The artist name was ${wordleWord}`);
             lockGame();
-            saveAttempts(attempt); // Save attempts
+            saveAttempts(attempt); 
             return;
         }
 

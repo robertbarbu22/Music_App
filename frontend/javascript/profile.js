@@ -22,19 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function clearCookiesAndCache() {
-    // Curățare cache
     if ('caches' in window) {
         caches.keys().then((names) => {
             names.forEach(name => caches.delete(name));
         });
     }
 
-    // Curățare cookie-uri
     document.cookie.split(";").forEach((c) => {
         document.cookie = c.trim().split("=")[0] + "=;expires=" + new Date(0).toUTCString() + ";path=/";
     });
 
-    // Forțare deconectare Spotify prin iframe
     let iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.src = 'https://www.spotify.com/logout/';

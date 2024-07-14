@@ -35,6 +35,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 ratingInput.className = 'rating-input';
                 ratingInput.dataset.songId = song.id;
 
+                // validare 
+                ratingInput.addEventListener('change', (event) => {
+                    const value = parseInt(event.target.value, 10);
+                    if (isNaN(value) || value < 1 || value > 10 || !Number.isInteger(value)) {
+                        alert('Please enter an integer between 1 and 10.');
+                        event.target.value = '';
+                    }
+                });
+
                 const favoriteButton = document.createElement('button');
                 favoriteButton.innerHTML = '⭐';
                 favoriteButton.className = 'favorite-button';
@@ -83,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     };
                 });
 
-                if (ratings.some(r => !r.rating)) {
-                    alert('Please rate all songs before submitting.');
+                if (ratings.some(r => !r.rating || r.rating < 1 || r.rating > 10 || !Number.isInteger(Number(r.rating)))) {
+                    alert('Please ensure all ratings are integers between 1 and 10.');
                     return;
                 }
 
@@ -105,5 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('An error occurred while saving ratings');
                 });
             });
-        });
+        })
+        .catch(error => console.error('Error fetching top songs:', error));
 });

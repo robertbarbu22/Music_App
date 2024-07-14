@@ -116,7 +116,7 @@ const rateSong = (req, res) => {
 
 const getLeaderboard = (req, res) => {
     if (req.session.auth) {
-        const today = new Date().toISOString().split('T')[0]; // Obținem data de azi în format 'YYYY-MM-DD'
+        const today = new Date().toISOString().split('T')[0]; // format 'YYYY-MM-DD'
 
         db.all(`
             SELECT song_id, SUM(rating) as total_rating

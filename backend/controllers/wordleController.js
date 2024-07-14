@@ -11,7 +11,7 @@ const getWordle = (req, res) => {
                 return res.status(500).json({ error: 'Failed to fetch Wordle data' });
             }
             if (row && row.date === today) {
-                // If there's already an entry for today
+                // daca deja e intrare azi
                 db.get('SELECT word, attempts FROM wordle WHERE user_id = ? AND date = ?', [userId, today], (err, wordleRow) => {
                     if (err) {
                         return res.status(500).json({ error: 'Failed to fetch Wordle data' });
@@ -19,7 +19,7 @@ const getWordle = (req, res) => {
                     return res.json({ word: wordleRow.word, attempts: wordleRow.attempts });
                 });
             } else {
-                // If no entry for today, create a new one
+                // daca nu e
                 const options = {
                     url: 'https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks',
                     headers: { 'Authorization': 'Bearer ' + req.session.auth.access_token },

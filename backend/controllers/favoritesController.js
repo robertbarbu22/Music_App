@@ -1,7 +1,7 @@
 const request = require('request');
 const db = require('../config/db');
 
-// Funcția pentru a adăuga o piesă la favorite și la Liked Songs pe Spotify
+// Funciia pentru a adduga o piesa la favorite si la Liked Songs pe Spotify
 const addFavorite = (req, res) => {
     const { songId, title, artist, albumCover, previewUrl } = req.body;
     const userId = req.session.user.id;

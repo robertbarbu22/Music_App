@@ -1,9 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.submit-button').addEventListener('click', () => {
-        const happinessLevel = document.getElementById('happiness-input').value;
+        const happinessLevelInput = document.getElementById('happiness-input');
+        const happinessLevel = parseInt(happinessLevelInput.value, 10);
 
-        if (happinessLevel < 1 || happinessLevel > 10) {
-            showToast();
+        if (isNaN(happinessLevel) || happinessLevel < 1 || happinessLevel > 10) {
+            alert('Please enter an integer between 1 and 10.');
+            happinessLevelInput.value = ''; // clear daca nu e input valid
             return;
         }
 

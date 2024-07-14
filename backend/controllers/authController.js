@@ -10,7 +10,7 @@ const login = (req, res) => {
             console.error('Error destroying session:', err);
         } else {
             console.log('Session destroyed successfully');
-            res.clearCookie('connect.sid', { path: '/' }); // Clear the session cookie
+            res.clearCookie('connect.sid', { path: '/' }); 
             const scope = 'user-read-private user-read-email user-library-modify';
             res.redirect('https://accounts.spotify.com/authorize?' +
                 new URLSearchParams({
@@ -49,7 +49,7 @@ const callback = (req, res) => {
                     'refresh_token': refresh_token
                 };
 
-                // Obține datele utilizatorului
+                // Obtine datele utilizatorului
                 const userOptions = {
                     url: 'https://api.spotify.com/v1/me',
                     headers: { 'Authorization': 'Bearer ' + access_token },
@@ -59,7 +59,7 @@ const callback = (req, res) => {
                 request.get(userOptions, (error, response, body) => {
                     if (!error && response.statusCode === 200) {
                         req.session.user = body;
-                        // Salvare date utilizator în baza de date
+                        // Salvare date utilizator in baza de date
                         const { id, display_name, email } = body;
                         db.get(`SELECT streak FROM users WHERE id = ?`, [id], (err, row) => {
                             if (err) {

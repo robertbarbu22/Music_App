@@ -21,7 +21,7 @@ app.use(session({
 // Configurare pentru parsarea JSON
 app.use(express.json());
 
-// Setează directorul 'frontend' pentru a servi conținut static
+// directorul 'frontend' pentru a servi conținut static
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
 // Rute
@@ -39,7 +39,7 @@ app.use(songsRoutes);
 app.use(favoritesRoutes);
 app.use(recommendationRoutes);
 
-// Rută pentru pagina principală
+// Ruta pentru pagina principală
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'html', 'login.html'));
 });
@@ -103,7 +103,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
-// Task-ul de ștergere a intrărilor din leaderboard
+// Task-ul de stergere a intrărilor din leaderboard
 cron.schedule('0 0 * * *', () => {
     console.log('Running a task every day at midnight');
     db.run(`DELETE FROM ratings`, (err) => {
@@ -134,7 +134,7 @@ async function getRecommendations(userData) {
     return response.data.choices[0].text;
 }
 
-// Rută pentru a obține recomandări
+// Ruta pentru a obtine recomandari
 app.post('/api/recommendations', async (req, res) => {
     const userData = req.body;
 
@@ -147,7 +147,7 @@ app.post('/api/recommendations', async (req, res) => {
     }
 });
 
-// Rută pentru pagina de recomandări
+// Ruta pentru pagina de recomandari
 app.get('/recommendations', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'html', 'recommendations.html'));
 });
